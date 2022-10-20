@@ -6,3 +6,4 @@ logs/cloudserver/traefik/traefik.log
 shared/.htpasswd
 .env
 appdata/authelia/notification.txt
+secrets/
