@@ -1,0 +1,8 @@
+appdata/authelia/db.sqlite3
+appdata/authelia/users_database.yml
+appdata/traefik2/acme/acme.json
+logs/cloudserver/traefik/access.log
+logs/cloudserver/traefik/traefik.log
+shared/.htpasswd
+.env
+appdata/authelia/notification.txt
