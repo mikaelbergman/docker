@@ -2,9 +2,9 @@ http:
   middlewares:
     middlewares-basic-auth:
       basicAuth:
-        users:
-        - "sysop:$apr1$7ltujkhy$xiggMjbZB.Vg8CwF0nEO80"
-        #usersFile: "/run/secrets/htpasswd" #be sure to mount the volume through docker-compose.yml
+        #users:
+        #- "sysop:$apr1$7lXXXX"
+        usersFile: "/run/secrets/htpasswd" #be sure to mount the volume through docker-compose.yml
         realm: "Traefik 2 Basic Auth"
 
     middlewares-rate-limit:
