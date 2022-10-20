@@ -1333,7 +1333,7 @@ services:
       ## Middlewares
       #- "traefik.http.routers.dozzle-rtr.middlewares=chain-oauth@file"
       #- "traefik.http.routers.dozzle-rtr.middlewares=middlewares-basic-auth@file" # For Basic HTTP Authentication
-      #- "traefik.http.routers.dozzle-rtr.middlewares=chain-authelia@file" # For Authelia Authentication
+      - "traefik.http.routers.dozzle-rtr.middlewares=chain-authelia@file" # For Authelia Authentication
       ## HTTP Services
       - "traefik.http.routers.dozzle-rtr.service=dozzle-svc"
       - "traefik.http.services.dozzle-svc.loadbalancer.server.port=8080"
