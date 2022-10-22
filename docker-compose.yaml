@@ -863,36 +863,6 @@ services:
   #     - "traefik.http.routers.airsonic-rtr.service=airsonic-svc"
   #     - "traefik.http.services.airsonic-svc.loadbalancer.server.port=4040"
 
-  # Jellyfin - Media Server
-  # jellyfin:
-  #   <<: *common-keys-media # See EXTENSION FIELDS at the top
-  #   image: jellyfin/jellyfin:latest
-  #   container_name: jellyfin
-  #   #devices:
-  #   #  - /dev/dri:/dev/dri # for harware transcoding
-  #   ports:
-  #     - "$JELLYFIN_PORT:8096"
-  #     - "8920:8920" # Emby also uses same port if running both
-  #   environment:
-  #     <<: *default-tz-puid-pgid
-  #     UMASK_SET: 022
-  #   volumes:
-  #     - $DOCKERDIR/appdata/jellyfin:/config
-  #     - $DATADIR/temp/appdata/jellyfin/metadata:/config/metadata
-  #     - $DATADIR/downloads:/data/downloads
-  #     - $DATADIR/media:/data/media
-  #     - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
-  #   labels:
-  #     - "traefik.enable=true"
-  #     ## HTTP Routers
-  #     - "traefik.http.routers.jellyfin-rtr.entrypoints=https"
-  #     - "traefik.http.routers.jellyfin-rtr.rule=Host(`proxjf.$DOMAINNAME_CLOUD_SERVER`)"
-  #     ## Middlewares
-  #     - "traefik.http.routers.jellyfin-rtr.middlewares=chain-no-auth@file"
-  #     ## HTTP Services
-  #     - "traefik.http.routers.jellyfin-rtr.service=jellyfin-svc"
-  #     - "traefik.http.services.jellyfin-svc.loadbalancer.server.port=8096"
-
   # Plex - Media Server
   plexms:
     <<: *common-keys-media # See EXTENSION FIELDS at the top
@@ -912,20 +882,18 @@ services:
       - "32414:32414/udp"
       - "$PLEX_WEB_TOOLS_PORT:33400"
     volumes:
-      - "/data/docker/plex:/config"
-      - "/home/sysop/plex/transcode:/transcode"
-      - "/data/media/tv:/media/tv"
-      - "/data/media/movies:/media/movies"
-      - "/data/media/music:/media/music"
-      - "/data/media/movies-concerts:/media/concerts"
-      # - $DOCKERDIR/appdata/plexms:/config
-      # - $DATADIR/downloads:/data/downloads
-      # - $DATADIR/media:/data/media
-      # - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
+      - $DOCKERDIR/appdata/plexms:/config
+      - $DATADIR/media/tv:/media/tv
+      - $DATADIR/media/movies:/media/movies
+      - $DATADIR/media/music:/media/music
+      - $DATADIR/media/movies-concerts:/media/concerts
       # Optional. See why the folders below are mounted as volumes https://github.com/htpcBeginner/docker-traefik/discussions/147
-      # - $DATADIR/temp/appdata/plexms/Cache:/config/Library/Application Support/Plex Media Server/Cache
-      # - $DATADIR/temp/appdata/plexms/Metadata:/config/Library/Application Support/Plex Media Server/Metadata
-      # - $DATADIR/temp/appdata/plexms/Media:/config/Library/Application Support/Plex Media Server/Media
+      - $DATADIR/appdata/plexms/Cache:/config/Library/Application Support/Plex Media Server/Cache
+      - $DATADIR/appdata/plexms/Metadata:/config/Library/Application Support/Plex Media Server/Metadata
+      - $DATADIR/appdata/plexms/Media:/config/Library/Application Support/Plex Media Server/Media
+      # - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
+      - $DATADIR/appdata/plexms/Transcode:/transcode
+
     environment:
       TZ: $TZ
       HOSTNAME: "Plex"
