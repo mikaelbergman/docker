@@ -1,6 +1,7 @@
 appdata/authelia/db.sqlite3
 appdata/authelia/users_database.yml
 appdata/traefik2/acme/acme.json
+appdata/plexms/
 logs/cloudserver/traefik/access.log
 logs/cloudserver/traefik/traefik.log
 shared/.htpasswd
