@@ -9,3 +9,4 @@ shared/.htpasswd
 .env
 appdata/authelia/notification.txt
 secrets/
+appdata/nzbget/nzbget.conf
