@@ -567,6 +567,24 @@ services:
   #     - "traefik.http.routers.qbittorrent-rtr.service=qbittorrent-svc"
   #     - "traefik.http.services.qbittorrent-svc.loadbalancer.server.port=8080"
 
+  # sabnzbd - Binary newsgrabber (NZB downloader)
+  sabnzbd:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    image: cr.hotio.dev/hotio/sabnzbd
+    container_name: sabnzbd
+    networks:
+      t2_proxy:
+        ipv4_address: "$SABNZBD_IP"
+    ports:
+      - "$SABNZBD_PORT:8080"
+    volumes:
+      - $DOCKERDIR/appdata/sabnzbd:/config
+      - $DOCKERDIR/logs/cloudserver/sabnzbd:/config/logs
+      #- $DATADIR/downloads:/data/downloads
+      - $DATADIR/usenet:/data/usenet
+    environment:
+      <<: *default-tz-puid-pgid
+
   # nzbget - Binary newsgrabber (NZB downloader)
   # nzbget:
   #   <<: *common-keys-apps # See EXTENSION FIELDS at the top
@@ -575,13 +593,13 @@ services:
   #   container_name: nzbget
   #   networks:
   #     t2_proxy:
-  #       ipv4_address: 192.168.90.216
+  #       ipv4_address: "$NZBGET_IP"
   #   ports:
   #     - "$NZBGET_PORT:6789"
   #   volumes:
   #     - $DOCKERDIR/appdata/nzbget:/config
   #     #- $DATADIR/downloads:/data/downloads
-  #     - $DATADIR/data/usenet:/data/usenet
+  #     - $DATADIR/usenet:/data/usenet
   #   environment:
   #     <<: *default-tz-puid-pgid
   #   labels:
