@@ -9,8 +9,6 @@ shared/.htpasswd
 .env
 appdata/authelia/notification.txt
 secrets/
-appdata/nzbget/nzbget.log
-appdata/nzbget/nzbget.conf
 appdata/sabnzbd/sabnzbd.ini
 appdata/sabnzbd/sabnzbd.ini.bak
 appdata/sabnzbd/admin/history1.db
@@ -19,4 +17,6 @@ appdata/sabnzbd/admin/queue10.sab
 appdata/sabnzbd/admin/rss_data.sab
 appdata/sabnzbd/admin/totals10.sab
 appdata/sabnzbd/admin/watched_data2.sab
+appdata/sonarr/
+appdata/radarr/
 logs/
