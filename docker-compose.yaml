@@ -500,13 +500,14 @@ services:
   #     - /etc/localtime:/etc/localtime:ro
   #     - $DOCKERDIR/appdata/transmission-vpn/data:/data
   #     - $DOCKERDIR/appdata/transmission-vpn/config:/config
+  #     - $DOCKERDIR/appdata/transmission-vpn/custom:/etc/openvpn/custom/
   #     - $DATADIR/downloads:/data/downloads
   #   environment:
   #     <<: *default-tz-puid-pgid
-  #     OPENVPN_PROVIDER: FASTESTVPN
-  #     OPENVPN_USERNAME: $FASTEST_USERNAME
-  #     OPENVPN_PASSWORD: $FASTEST_PASSWORD
-  #     #OPENVPN_CONFIG: "Switzerland-UDP"
+  #     OPENVPN_PROVIDER: $OPENVPN_PROVIDER
+  #     OPENVPN_USERNAME: $OPENVPN_USERNAME
+  #     OPENVPN_PASSWORD: $OPENVPN_PASSWORD
+  #     OPENVPN_CONFIG: "AirVPN_Netherlands_UDP-443-Entry3"
   #     #OPENVPN_OPTS: --inactive 3600 --ping 10 --ping-exit 60
   #     LOCAL_NETWORK: "$LOCAL_NETWORK"
   #     UMASK_SET: 2
@@ -588,30 +589,31 @@ services:
   ############################# INDEXERS
 
   # Prowlarr - Torrent proxy
-  # prowlarr:
-  #   <<: *common-keys-apps # See EXTENSION FIELDS at the top
-  #   image: ghcr.io/linuxserver/prowlarr:develop
-  #   container_name: prowlarr
-  #   networks:
-  #     t2_proxy:
-  #       ipv4_address: 192.168.90.162
-  #   # ports:
-  #   #  - "$PROWLARR_PORT:9696"
-  #   volumes:
-  #     - $DOCKERDIR/appdata/prowlarr:/config
-  #     - "/etc/localtime:/etc/localtime:ro"
-  #   environment:
-  #     <<: *default-tz-puid-pgid
-  #   labels:
-  #     - "traefik.enable=true"
-  #     ## HTTP Routers
-  #     - "traefik.http.routers.prowlarr-rtr.entrypoints=https"
-  #     - "traefik.http.routers.prowlarr-rtr.rule=Host(`prowlarr.$DOMAINNAME_CLOUD_SERVER`)"
-  #     ## Middlewares
-  #     - "traefik.http.routers.prowlarr-rtr.middlewares=chain-oauth@file"
-  #     ## HTTP Services
-  #     - "traefik.http.routers.prowlarr-rtr.service=prowlarr-svc"
-  #     - "traefik.http.services.prowlarr-svc.loadbalancer.server.port=9696"
+  prowlarr:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    # image: ghcr.io/linuxserver/prowlarr:develop
+    image: cr.hotio.dev/hotio/prowlarr
+    container_name: prowlarr
+    networks:
+      t2_proxy:
+        ipv4_address: "$PROWLARR_IP"
+    ports:
+      - "$PROWLARR_PORT:9696"
+    volumes:
+      - $DOCKERDIR/appdata/prowlarr:/config
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      <<: *default-tz-puid-pgid
+    # labels:
+    #   - "traefik.enable=true"
+    #   ## HTTP Routers
+    #   - "traefik.http.routers.prowlarr-rtr.entrypoints=https"
+    #   - "traefik.http.routers.prowlarr-rtr.rule=Host(`prowlarr.$DOMAINNAME_CLOUD_SERVER`)"
+    #   ## Middlewares
+    #   - "traefik.http.routers.prowlarr-rtr.middlewares=chain-oauth@file"
+    #   ## HTTP Services
+    #   - "traefik.http.routers.prowlarr-rtr.service=prowlarr-svc"
+    #   - "traefik.http.services.prowlarr-svc.loadbalancer.server.port=9696"
 
   ############################# PVRS
 
@@ -661,7 +663,7 @@ services:
     container_name: radarr
     networks:
       t2_proxy:
-        ipv4_address: 192.168.90.164
+        ipv4_address: "$RADARR_IP"
     ports:
       - "$RADARR_PORT:7878"
     volumes:
@@ -700,7 +702,7 @@ services:
     container_name: sonarr
     networks:
       t2_proxy:
-        ipv4_address: 192.168.90.167
+        ipv4_address: "$SONARR_IP"
     ports:
       - "$SONARR_PORT:8989"
     volumes:
