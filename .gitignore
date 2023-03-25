@@ -1,4 +1,15 @@
-appdata/
+appdata/authelia/configuration.yml
+appdata/authelia/db.sqlite3
+appdata/authelia/notification.txt
+appdata/authelia/users_database.yml
+appdata/plexms/
+appdata/portainer/
+appdata/prowlarr/
+appdata/radarr/
+appdata/sabnzbd/
+appdata/sonarr/
+appdata/traefik2/
+appdata/transmission-vpn/
 logs/
 secrets/
 shared/.htpasswd
