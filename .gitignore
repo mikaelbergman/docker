@@ -11,12 +11,7 @@ appdata/sonarr/
 appdata/traefik2/
 appdata/transmission-vpn/
 appdata/qbittorrent/.cache/
-appdata/qbittorrent/qBittorrent/BT_backup/
-appdata/qbittorrent/qBittorrent/GeoDB/
-appdata/qbittorrent/qBittorrent/logs/
-appdata/qbittorrent/qBittorrent/rss/
-appdata/qbittorrent/qBittorrent/ipc-socket
-appdata/qbittorrent/qBittorrent/lockfile
+appdata/qbittorrent/qBittorrent/
 logs/
 secrets/
 shared/.htpasswd
