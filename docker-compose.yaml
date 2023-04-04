@@ -548,28 +548,28 @@ services:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
-    networks:
-      t2_proxy:
-        ipv4_address: "$QBITTORRENT_IP"
-    # network_mode: container:transmission-vpn
-    #  ports:
-    #    - "$QBITTORRENT_PORT:8080"
+    # networks:
+    #   t2_proxy:
+    #     ipv4_address: "$QBITTORRENT_IP"
+    network_mode: "service:gluetun"
+    # ports:
+    #   - "$QBITTORRENT_PORT:8080" # Exposed via Gluetun
     volumes:
       - $DOCKERDIR/appdata/qbittorrent:/config
       - $DATADIR/downloads:/data/torrents # Ensure that downloads folder is set to /data/downloads in qBittorrent
     environment:
       <<: *default-tz-puid-pgid
       UMASK_SET: 002
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.qbittorrent-rtr.entrypoints=https"
-      - "traefik.http.routers.qbittorrent-rtr.rule=Host(`qbit.$DOMAINNAME_CLOUD_SERVER`)"
-      ## Middlewares
-      - "traefik.http.routers.qbittorrent-rtr.middlewares=chain-oauth@file"
-      ## HTTP Services
-      - "traefik.http.routers.qbittorrent-rtr.service=qbittorrent-svc"
-      - "traefik.http.services.qbittorrent-svc.loadbalancer.server.port=8080"
+    # labels:
+    #   - "traefik.enable=true"
+    #   ## HTTP Routers
+    #   - "traefik.http.routers.qbittorrent-rtr.entrypoints=https"
+    #   - "traefik.http.routers.qbittorrent-rtr.rule=Host(`qbit.$DOMAINNAME_CLOUD_SERVER`)"
+    #   ## Middlewares
+    #   - "traefik.http.routers.qbittorrent-rtr.middlewares=chain-oauth@file"
+    #   ## HTTP Services
+    #   - "traefik.http.routers.qbittorrent-rtr.service=qbittorrent-svc"
+    #   - "traefik.http.services.qbittorrent-svc.loadbalancer.server.port=8080"
 
   # sabnzbd - Binary newsgrabber (NZB downloader)
   sabnzbd:
@@ -1164,6 +1164,40 @@ services:
   #     ## HTTP Services
   #     - "traefik.http.routers.uptime-kuma-rtr.service=uptime-kuma-svc"
   #     - "traefik.http.services.uptime-kuma-svc.loadbalancer.server.port=3001"
+
+  # Gluetun - VPN Client for Docker Containers and More
+  # Gluetun only for use by torrent clients + on demand lan devices.
+  # Arr apps do not need VPN (not recommended), unless you have ISP/country restrictions.
+  gluetun:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    ports:
+      - "$QBITTORRENT_PORT:8080" # Exposing qBittorrent through Docker Host LAN IP
+    # #   - 8888:8888/tcp # HTTP proxy
+    # #   - 8388:8388/tcp # Shadowsocks
+    # #   - 8388:8388/udp # Shadowsocks
+    volumes:
+      - $DOCKERDIR/appdata/gluetun:/gluetun
+    environment:
+      TZ: $TZ
+      # OpenVPN
+      VPN_SERVICE_PROVIDER: airvpn
+      SERVER_COUNTRIES: Netherlands
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.gluetun-qbittorrent-rtr.entrypoints=https"
+      - "traefik.http.routers.gluetun-qbittorrent-rtr.rule=Host(`qbit.$DOMAINNAME_CLOUD_SERVER`)" # qBittorrent
+      ## Middlewares
+      - "traefik.http.routers.gluetun-qbittorrent-rtr.middlewares=chain-oauth@file" # qBittorrent
+      ## HTTP Services
+      - "traefik.http.routers.gluetun-qbittorrent-rtr.service=gluetun-svc" # qBittorrent
+      - "traefik.http.services.gluetun-svc.loadbalancer.server.port=8080" # qBittorrent
 
   ############################# MAINTENANCE
 

@@ -2,6 +2,7 @@ appdata/authelia/configuration.yml
 appdata/authelia/db.sqlite3
 appdata/authelia/notification.txt
 appdata/authelia/users_database.yml
+appdata/gluetun/
 appdata/plexms/
 appdata/portainer/
 appdata/prowlarr/
