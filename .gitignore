@@ -13,6 +13,7 @@ appdata/sonarr/
 appdata/tautulli/
 appdata/traefik2/
 appdata/transmission-vpn/
+appdata/uptime-kuma/
 appdata/qbittorrent/.cache/
 appdata/qbittorrent/qBittorrent/
 logs/
