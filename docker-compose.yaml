@@ -891,25 +891,27 @@ services:
       - "traefik.http.services.dozzle-svc.loadbalancer.server.port=8080"
 
   # Uptime Kuma - Status Page & Monitoring Server
-  # uptime-kuma:
-  #   <<: *common-keys-core # See EXTENSION FIELDS at the top
-  #   image: louislam/uptime-kuma
-  #   container_name: uptime-kuma
-  #   networks:
-  #     - t2_proxy
-  #     - default
-  #   volumes:
-  #     - $DOCKERDIR/appdata/uptime-kuma:/app/data
-  #   labels:
-  #     - "traefik.enable=true"
-  #     ## HTTP Routers
-  #     - "traefik.http.routers.uptime-kuma-rtr.entrypoints=https"
-  #     - "traefik.http.routers.uptime-kuma-rtr.rule=Host(`kuma.$DOMAINNAME_CLOUD_SERVER`)"
-  #     ## Middlewares
-  #     - "traefik.http.routers.uptime-kuma-rtr.middlewares=chain-oauth@file"
-  #     ## HTTP Services
-  #     - "traefik.http.routers.uptime-kuma-rtr.service=uptime-kuma-svc"
-  #     - "traefik.http.services.uptime-kuma-svc.loadbalancer.server.port=3001"
+  uptime-kuma:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: louislam/uptime-kuma
+    container_name: uptime-kuma
+    networks:
+      - t2_proxy
+      - default
+    volumes:
+      - $DOCKERDIR/appdata/uptime-kuma:/app/data
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.uptime-kuma-rtr.entrypoints=https"
+      - "traefik.http.routers.uptime-kuma-rtr.rule=Host(`kuma.$DOMAINNAME_CLOUD_SERVER`)"
+      - "traefik.http.routers.uptime-kuma-rtr.tls=true"
+      ## Middlewares
+      # - "traefik.http.routers.uptime-kuma-rtr.middlewares=chain-oauth@file" # For Basic HTTP Authentication
+      - "traefik.http.routers.uptime-kuma-rtr.middlewares=chain-authelia@file" # For Authelia Authentication
+      ## HTTP Services
+      - "traefik.http.routers.uptime-kuma-rtr.service=uptime-kuma-svc"
+      - "traefik.http.services.uptime-kuma-svc.loadbalancer.server.port=3001"
 
   # Gluetun - VPN Client for Docker Containers and More
   # Gluetun only for use by torrent clients + on demand lan devices.
