@@ -738,27 +738,30 @@ services:
 
   # Tautulli - Previously PlexPy. Plex statistics and monitoring
   # Set HTTP Root in Tautulli settings if using PathPrefix
-  # tautulli:
-  #   <<: *common-keys-media # See EXTENSION FIELDS at the top
-  #   image: lscr.io/linuxserver/tautulli:latest
-  #   container_name: tautulli
-  #   ports:
-  #     - "$TAUTULLI_PORT:8181"
-  #   volumes:
-  #     - $DOCKERDIR/appdata/tautulli/config:/config
-  #     - $DOCKERDIR/appdata/plexms/Library/Application Support/Plex Media Server/Logs:/logs:ro # For tautulli Plex log viewer
-  #   environment:
-  #     <<: *default-tz-puid-pgid
-  #   labels:
-  #     - "traefik.enable=true"
-  #     ## HTTP Routers
-  #     - "traefik.http.routers.tautulli-rtr.entrypoints=https"
-  #     - "traefik.http.routers.tautulli-rtr.rule=Host(`tautulli.$DOMAINNAME_CLOUD_SERVER`)"
-  #     ## Middlewares
-  #     - "traefik.http.routers.tautulli-rtr.middlewares=chain-oauth@file"
-  #     ## HTTP Servicesnoauth
-  #     - "traefik.http.routers.tautulli-rtr.service=tautulli-svc"
-  #     - "traefik.http.services.tautulli-svc.loadbalancer.server.port=8181"
+  tautulli:
+    <<: *common-keys-media # See EXTENSION FIELDS at the top
+    #image: lscr.io/linuxserver/tautulli:latest
+    image: cr.hotio.dev/hotio/tautulli
+    container_name: tautulli
+    ports:
+      - "$TAUTULLI_PORT:8181"
+    volumes:
+      - $DOCKERDIR/appdata/tautulli/config:/config
+      - $DOCKERDIR/appdata/plexms/Library/Application Support/Plex Media Server/Logs:/logs:ro # For tautulli Plex log viewer
+    environment:
+      <<: *default-tz-puid-pgid
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.tautulli-rtr.entrypoints=https"
+      - "traefik.http.routers.tautulli-rtr.rule=Host(`tautulli.$DOMAINNAME_CLOUD_SERVER`)"
+      - "traefik.http.routers.tautulli-rtr.tls=true"
+      ## Middlewares
+      # - "traefik.http.routers.tautulli-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.tautulli-rtr.middlewares=chain-authelia@file" # For Authelia Authentication
+      ## HTTP Servicesnoauth
+      - "traefik.http.routers.tautulli-rtr.service=tautulli-svc"
+      - "traefik.http.services.tautulli-svc.loadbalancer.server.port=8181"
 
   ############################# MEDIA FILE MANAGEMENT
 
