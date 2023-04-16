@@ -763,34 +763,34 @@ services:
   ############################# MEDIA FILE MANAGEMENT
 
   # Bazarr - Subtitle Management
-  # bazarr:
-  #   <<: *common-keys-media # See EXTENSION FIELDS at the top
-  #   image: lscr.io/linuxserver/bazarr
-  #   container_name: bazarr
-  #   ports:
-  #     - "$BAZARR_PORT:6767"
-  #   volumes:
-  #     - $DOCKERDIR/appdata/bazarr:/config
-  #     - $DATADIR/media:/data/media
-  #   environment:
-  #     <<: *default-tz-puid-pgid
-  #   labels:
-  #     - "traefik.enable=true"
-  #     ## HTTP Routers Auth Bypass
-  #     - "traefik.http.routers.bazarr-rtr-bypass.entrypoints=https"
-  #     - "traefik.http.routers.bazarr-rtr-bypass.rule=Host(`bazarr.$DOMAINNAME_CLOUD_SERVER`) && (Headers(`X-Api-Key`, `$BAZARR_API_KEY`) || Query(`apikey`, `$BAZARR_API_KEY`))"
-  #     - "traefik.http.routers.bazarr-rtr-bypass.priority=100"
-  #     ## HTTP Routers Auth
-  #     - "traefik.http.routers.bazarr-rtr.entrypoints=https"
-  #     - "traefik.http.routers.bazarr-rtr.rule=Host(`bazarr.$DOMAINNAME_CLOUD_SERVER`)"
-  #     - "traefik.http.routers.bazarr-rtr.priority=99"
-  #     ## Middlewares
-  #     - "traefik.http.routers.bazarr-rtr-bypass.middlewares=chain-no-auth@file"
-  #     - "traefik.http.routers.bazarr-rtr.middlewares=chain-oauth@file"
-  #     ## HTTP Services
-  #     - "traefik.http.routers.bazarr-rtr.service=bazarr-svc"
-  #     - "traefik.http.routers.bazarr-rtr-bypass.service=bazarr-svc"
-  #     - "traefik.http.services.bazarr-svc.loadbalancer.server.port=6767"
+  bazarr:
+    <<: *common-keys-media # See EXTENSION FIELDS at the top
+    image: cr.hotio.dev/hotio/bazarr
+    container_name: bazarr
+    ports:
+      - "$BAZARR_PORT:6767"
+    volumes:
+      - $DOCKERDIR/appdata/bazarr:/config
+      - $DATADIR/media:/data/media
+    environment:
+      <<: *default-tz-puid-pgid
+    # labels:
+    #   - "traefik.enable=true"
+    #   ## HTTP Routers Auth Bypass
+    #   - "traefik.http.routers.bazarr-rtr-bypass.entrypoints=https"
+    #   - "traefik.http.routers.bazarr-rtr-bypass.rule=Host(`bazarr.$DOMAINNAME_CLOUD_SERVER`) && (Headers(`X-Api-Key`, `$BAZARR_API_KEY`) || Query(`apikey`, `$BAZARR_API_KEY`))"
+    #   - "traefik.http.routers.bazarr-rtr-bypass.priority=100"
+    #   ## HTTP Routers Auth
+    #   - "traefik.http.routers.bazarr-rtr.entrypoints=https"
+    #   - "traefik.http.routers.bazarr-rtr.rule=Host(`bazarr.$DOMAINNAME_CLOUD_SERVER`)"
+    #   - "traefik.http.routers.bazarr-rtr.priority=99"
+    #   ## Middlewares
+    #   - "traefik.http.routers.bazarr-rtr-bypass.middlewares=chain-no-auth@file"
+    #   - "traefik.http.routers.bazarr-rtr.middlewares=chain-oauth@file"
+    #   ## HTTP Services
+    #   - "traefik.http.routers.bazarr-rtr.service=bazarr-svc"
+    #   - "traefik.http.routers.bazarr-rtr-bypass.service=bazarr-svc"
+    #   - "traefik.http.services.bazarr-svc.loadbalancer.server.port=6767"
 
   ############################# UTILITIES
 
