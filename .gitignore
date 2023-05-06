@@ -4,6 +4,7 @@ appdata/authelia/notification.txt
 appdata/authelia/users_database.yml
 appdata/bazarr/
 appdata/gluetun/
+appdata/mariadb/
 appdata/plexms/
 appdata/portainer/
 appdata/prowlarr/
