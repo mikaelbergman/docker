@@ -429,8 +429,11 @@ services:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     container_name: mariadb
     image: lscr.io/linuxserver/mariadb
-    #ports:
-    #  - "$MARIADB_PORT:3306"
+    networks:
+      t2_proxy:
+        ipv4_address: "$MARIADB_HOST"
+    ports:
+      - "$MARIADB_PORT:3306"
     volumes:
       - $DOCKERDIR/appdata/mariadb/data:/config
     environment:
@@ -445,6 +448,9 @@ services:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
     image: phpmyadmin/phpmyadmin:latest
     container_name: phpmyadmin
+    networks:
+      t2_proxy:
+        ipv4_address: "$PHPMYADMIN_IP"
     environment:
       - PMA_HOST=$MARIADB_HOST
       - PMA_PORT=$MARIADB_PORT
@@ -452,16 +458,16 @@ services:
       - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/mysql_root_password
     secrets:
       - mysql_root_password
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.phpmyadmin-rtr.entrypoints=https"
-      - "traefik.http.routers.phpmyadmin-rtr.rule=Host(`pma.$DOMAINNAME_CLOUD_SERVER`)"
-      ## Middlewares
-      - "traefik.http.routers.phpmyadmin-rtr.middlewares=chain-oauth@file"
-      ## HTTP Services
-      - "traefik.http.routers.phpmyadmin-rtr.service=phpmyadmin-svc"
-      - "traefik.http.services.phpmyadmin-svc.loadbalancer.server.port=80"
+    # labels:
+    #   - "traefik.enable=true"
+    #   ## HTTP Routers
+    #   - "traefik.http.routers.phpmyadmin-rtr.entrypoints=https"
+    #   - "traefik.http.routers.phpmyadmin-rtr.rule=Host(`phpmyadmin.$DOMAINNAME_CLOUD_SERVER`)"
+    #   ## Middlewares
+    #   - "traefik.http.routers.phpmyadmin-rtr.middlewares=chain-oauth@file"
+    #   ## HTTP Services
+    #   - "traefik.http.routers.phpmyadmin-rtr.service=phpmyadmin-svc"
+    #   - "traefik.http.services.phpmyadmin-svc.loadbalancer.server.port=80"
 
   ############################# DOWNLOADERS
 
